@@ -26,19 +26,15 @@ cities = []
 
 
 def cityreader(cities=[]):
-    with open('./src/cityreader/cities.csv', 'r') as obj:
+    with open('./src/cityreader/cities.csv') as obj:
         read_obj = reader(obj)
         for row in read_obj:
-            cities.append(City(row[0], row[3], row[4]))
-            cities.pop()
+            if row[0] != 'city':
+                cities.append(City(row[0], float(row[3]), float(row[4])))
     return cities
 
 
 cityreader(cities)
-
-# Print the list of cities (name, lat, lon), 1 record per line.
-for c in cities:
-    print(c)
 
 # STRETCH GOAL!
 #
@@ -73,11 +69,41 @@ for c in cities:
 
 
 def cityreader_stretch(lat1, lon1, lat2, lon2, cities=[]):
-  # within will hold the cities that fall within the specified region
+    # within will hold the cities that fall within the specified region
+    hor1 = 0.0
+    hor2 = 0.0
+    vir1 = 0.0
+    vir2 = 0.0
+    if lat1 > lat2:
+        hor1 = lat1
+        hor2 = lat2
+    else:
+        hor1 = lat2
+        hor2 = lat1
+
+    if lon1 > lon2:
+        vir1 = lon1
+        vir2 = lon2
+    else:
+        vir1 = lon2
+        vir2 = lon1
+
     within = []
+
+    for city in cities:
+        if hor1 > city.lat > hor2 and vir1 > city.lon > vir2:
+            within.append(city)
 
     # TODO Ensure that the lat and lon valuse are all floats
     # Go through each city and check to see if it falls within
     # the specified coordinates.
 
     return within
+
+
+"""
+User gives 2 points on the map (lat1, lon1), (lat2, lon2)
+function needs to create a sqaure using these points
+to find the other two points of the square the points would be at
+(lat1, lon2) (lat2, lon1)
+"""
